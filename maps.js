@@ -5,13 +5,13 @@
 
 const emojis = {
   '-': ' ',
-  'O': '🚪',
-  'X': '💣',
-  'I': '🎁',
-  'PLAYER': '💀',
-  'BOMB_COLLISION': '🔥',
-  'GAME_OVER': '👎',
-  'WIN': '🏆',
+  'O': 'ðŸšª',
+  'X': 'ðŸ’£',
+  'I': 'ðŸŽ',
+  'PLAYER': 'ðŸ’€',
+  'BOMB_COLLISION': 'ðŸ”¥',
+  'GAME_OVER': 'ðŸ‘Ž',
+  'WIN': 'ðŸ†',
 };
 
 const maps = [];

@@ -7,6 +7,7 @@ const btnDown = document.querySelector('#down');
 
 let canvasSize;
 let elementsSize;
+let level = 0;
 
 const playerPosition = {
   x: undefined,
@@ -16,6 +17,7 @@ const giftPosition = {
   x: undefined,
   y: undefined,
 };
+let enemyPositions = [];
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
@@ -41,12 +43,20 @@ function startGame() {
   game.font = elementsSize + 'px Verdana';
   game.textAlign = 'end';
 
-  const map = maps[0];
+  const map = maps[level];
+
+  if (!map) {
+    gameWin();
+    return;
+  }
+  
   const mapRows = map.trim().split('\n');
   const mapRowCols = mapRows.map(row => row.trim().split(''));
   console.log({map, mapRows, mapRowCols});
   
+  enemyPositions = [];
   game.clearRect(0,0,canvasSize, canvasSize);
+
   mapRowCols.forEach((row, rowI) => {
     row.forEach((col, colI) => {
       const emoji = emojis[col];
@@ -62,6 +72,11 @@ function startGame() {
       } else if (col == 'I') {
         giftPosition.x = posX;
         giftPosition.y = posY;
+      } else if (col == 'X') {
+        enemyPositions.push({
+          x: posX,
+          y: posY,
+        });
       }
       
       game.fillText(emoji, posX, posY);
@@ -77,10 +92,30 @@ function movePlayer() {
   const giftCollision = giftCollisionX && giftCollisionY;
   
   if (giftCollision) {
-    console.log('Subiste de nisvel!');
+    levelWin();
   }
+
+  const enemyCollision = enemyPositions.find(enemy => {
+    const enemyCollisionX = enemy.x.toFixed(3) == playerPosition.x.toFixed(3);
+    const enemyCollisionY = enemy.y.toFixed(3) == playerPosition.y.toFixed(3);
+    return enemyCollisionX && enemyCollisionY;
+  });
   
+  if (enemyCollision) {
+    console.log('Chocaste contra un enemigo :(');
+  }
+
   game.fillText(emojis['PLAYER'], playerPosition.x, playerPosition.y);
+}
+
+function levelWin() {
+  console.log('Subiste de nivel');
+  level++;
+  startGame();
+}
+
+function gameWin() {
+  console.log('Â¡Terminaste el juego!');
 }
 
 window.addEventListener('keydown', moveByKeys);
